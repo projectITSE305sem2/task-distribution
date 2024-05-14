@@ -1,8 +1,6 @@
+import java.util.Scanner;
 
-<<<<<<< HEAD
-=======
-public class Return  {
-    // An array that contains registered students' usernames and associated passwords, ISBNS
+public class Return {
     private String[] usernames = { "ali", "yousif", "fatima" };
     private String[] passwords = { "password1", "password2", "password3" };
     private String[] ISBN = { "12345", "55543", "67890" };
@@ -12,27 +10,42 @@ public class Return  {
     public boolean login(String username, String password) {
         for (int i = 0; i < usernames.length; i++) {
             if (username.equals(usernames[i]) && password.equals(passwords[i])) {
-                System.out.println("Hi " + usernames[i] + ", you have successfully logged in.");
                 return true;
             }
         }
-        System.out.println("Invalid username or password. Please try again.");
         return false;
     }
 
-    public void returnBook(String username, String password, String bookISBN) {
+    public String returnBook(String username, String password, String bookISBN) {
+        // Suggestions by Batool - Check for null or empty inputs
+        if (username == null || username.isEmpty()) {
+            System.out.println("Username is required.");
+            System.exit(0);
+        }
+
+        if (password == null || password.isEmpty()) {
+            System.out.println("Password is required.");
+            System.exit(0);
+        }
+
+        if (bookISBN == null || bookISBN.isEmpty()) {
+            System.out.println("Book ISBN is required.");
+            System.exit(0);
+        }
+
+        // Check if username and password match
         if (!login(username, password)) {
-            return;
+            System.out.println("Invalid username or password. Please try again.");
+            System.exit(0);
         }
 
-        // Check if payment is zero (assuming it's stored somewhere)
-        double payment = getPayment(username);  // Replace with your payment retrieval logic
+        double payment = getPayment(username);
         if (payment != 0) {
-            System.out.println("Please settle your payment before returning a book.");
-            return;
+            // Suggestions by batool- Display payment amount if there is an unfinished payment
+            System.out.println("Please settle your payment of $" + payment + " before returning a book.");
+            System.exit(0);
         }
 
-        // Check if the book ISBN is available in the ISBN array
         boolean validISBN = false;
         for (String isbn : ISBN) {
             if (isbn.equals(bookISBN)) {
@@ -42,18 +55,15 @@ public class Return  {
         }
 
         if (validISBN) {
-            // Allow return and show message
-            System.out.println("Thank you for returning the book with ISBN " + bookISBN);
+            return "Thank you for returning the book with ISBN " + bookISBN;
         } else {
-            System.out.println("Invalid book ISBN.");
+            return "Invalid book ISBN.";
         }
     }
 
-    // payment method have to be implemented, we have the case where when the book due date is passed
-    // then there is an amount of money that have to be paid by the user
     private double getPayment(String username) {
-        // the method should be implemented and we have to integrate the different ways of paying online
-        return 0.0;
+        // Implement your payment retrieval logic here
+        return 5.0;
     }
 
     public static void main(String[] args) {
@@ -69,8 +79,7 @@ public class Return  {
         System.out.print("Enter the book ISBN: ");
         String bookISBN = kb.nextLine();
 
-        r.returnBook(username, password, bookISBN);
+        String result = r.returnBook(username, password, bookISBN);
+        System.out.println(result);
     }
 }
-
->>>>>>> 2aff7af0100b0b89acad6e016d6852dc92ce2285
